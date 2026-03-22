@@ -24,6 +24,9 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Yogesh Gupta | Business Analyst Portfolio",
   description: "Senior Business Analyst — 7+ years in BFSI & GovTech, digital transformation, and Agile delivery.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
