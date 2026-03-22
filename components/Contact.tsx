@@ -48,10 +48,14 @@ export default function Contact() {
 
           {/* Form side */}
           <ScrollReveal delay={0.15}>
-            <div className="flex flex-col gap-5">
+            <form
+              action="https://formspree.io/f/maqpgwyq"
+              method="POST"
+              className="flex flex-col gap-5"
+            >
               {[
-                { label: "Name", type: "text", placeholder: "Your name" },
-                { label: "Email", type: "email", placeholder: "your@email.com" },
+                { label: "Name", type: "text", placeholder: "Your name", name: "name" },
+                { label: "Email", type: "email", placeholder: "your@email.com", name: "email" },
               ].map((field) => (
                 <div key={field.label}>
                   <label className="block font-mono text-[0.68rem] text-text-muted tracking-[0.1em] uppercase mb-2">
@@ -59,6 +63,8 @@ export default function Contact() {
                   </label>
                   <input
                     type={field.type}
+                    name={field.name}
+                    required
                     placeholder={field.placeholder}
                     className="w-full px-5 py-4 bg-bg-card border border-border rounded-[10px] text-text-primary font-body text-[0.95rem] outline-none focus:border-accent focus:shadow-[0_0_0_3px_rgba(200,255,0,0.08)] transition-all duration-300 placeholder:text-text-muted"
                   />
@@ -70,6 +76,8 @@ export default function Contact() {
                   Message
                 </label>
                 <textarea
+                  name="message"
+                  required
                   placeholder="Tell me about your project..."
                   rows={5}
                   className="w-full px-5 py-4 bg-bg-card border border-border rounded-[10px] text-text-primary font-body text-[0.95rem] outline-none resize-y min-h-[140px] focus:border-accent focus:shadow-[0_0_0_3px_rgba(200,255,0,0.08)] transition-all duration-300 placeholder:text-text-muted"
@@ -77,11 +85,14 @@ export default function Contact() {
               </div>
 
               <div>
-                <button className="inline-flex items-center gap-2.5 px-8 py-4 bg-accent text-bg font-display font-bold text-sm rounded-full hover:scale-[1.04] hover:shadow-[0_0_40px_rgba(200,255,0,0.15)] transition-all duration-300 border-none cursor-pointer">
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-accent text-bg font-display font-bold text-sm rounded-full hover:scale-[1.04] hover:shadow-[0_0_40px_rgba(200,255,0,0.15)] transition-all duration-300 border-none cursor-pointer"
+                >
                   Send Message <span>→</span>
                 </button>
               </div>
-            </div>
+            </form>
           </ScrollReveal>
         </div>
       </div>
