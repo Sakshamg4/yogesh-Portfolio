@@ -1,11 +1,46 @@
 "use client";
 
-import { Mail, Linkedin, Phone } from "lucide-react";
+import { useState } from "react";
+import { Mail, Linkedin, Phone, Loader2, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig, contactData } from "@/lib/data";
 import SectionHeader from "./SectionHeader";
 import ScrollReveal from "./ScrollReveal";
 
 export default function Contact() {
+  const [formState, setFormState] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormState("loading");
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch("https://formspree.io/f/maqpgwyq", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        setFormState("success");
+        setTimeout(() => setFormState("idle"), 5000);
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setFormState("error");
+        setTimeout(() => setFormState("idle"), 3000);
+      }
+    } catch (error) {
+      setFormState("error");
+      setTimeout(() => setFormState("idle"), 3000);
+    }
+  };
+
   return (
     <section className="py-36 border-t border-border scroll-mt-24" id="contact">
       <div className="max-w-[1200px] mx-auto px-6 md:px-10">
@@ -48,11 +83,7 @@ export default function Contact() {
 
           {/* Form side */}
           <ScrollReveal delay={0.15}>
-            <form
-              action="https://formspree.io/f/maqpgwyq"
-              method="POST"
-              className="flex flex-col gap-5"
-            >
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               {[
                 { label: "Name", type: "text", placeholder: "Your name", name: "name" },
                 { label: "Email", type: "email", placeholder: "your@email.com", name: "email" },
@@ -87,9 +118,57 @@ export default function Contact() {
               <div>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2.5 px-8 py-4 bg-accent text-bg font-display font-bold text-sm rounded-full hover:scale-[1.04] hover:shadow-[0_0_40px_rgba(200,255,0,0.15)] transition-all duration-300 border-none cursor-pointer"
+                  disabled={formState !== "idle"}
+                  className={`relative min-w-[180px] h-[52px] inline-flex items-center justify-center gap-2.5 px-8 bg-accent text-bg font-display font-bold text-sm rounded-full transition-all duration-300 border-none cursor-pointer overflow-hidden ${
+                    formState === "idle" ? "hover:scale-[1.04] hover:shadow-[0_0_40px_rgba(200,255,0,0.15)]" : "opacity-90"
+                  }`}
                 >
-                  Send Message <span>→</span>
+                  <AnimatePresence mode="wait">
+                    {formState === "idle" && (
+                      <motion.div
+                        key="idle"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="flex items-center gap-2"
+                      >
+                        Send Message <span>→</span>
+                      </motion.div>
+                    )}
+                    {formState === "loading" && (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Loader2 className="animate-spin" size={18} />
+                        Sending...
+                      </motion.div>
+                    )}
+                    {formState === "success" && (
+                      <motion.div
+                        key="success"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex items-center gap-2 text-bg"
+                      >
+                        <CheckCircle2 size={18} />
+                        Sent!
+                      </motion.div>
+                    )}
+                    {formState === "error" && (
+                      <motion.div
+                        key="error"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex items-center gap-2 text-red-600"
+                      >
+                        Try Again
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </button>
               </div>
             </form>
