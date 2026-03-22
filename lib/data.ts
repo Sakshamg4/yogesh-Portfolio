@@ -25,6 +25,7 @@ export const heroData = {
 };
 
 export const aboutData = {
+  profileImage: "/assets/yogesh.jpeg",
   tag: "// About me",
   title: "Analyzing processes,",
   titleItalic: "delivering outcomes.",

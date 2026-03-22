@@ -1,6 +1,6 @@
 "use client";
 
-import { aboutData } from "@/lib/data";
+import { aboutData, siteConfig } from "@/lib/data";
 import SectionHeader from "./SectionHeader";
 import ScrollReveal from "./ScrollReveal";
 
@@ -12,15 +12,23 @@ export default function About() {
           {/* Image placeholder */}
           <ScrollReveal>
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-bg-card border border-border">
-              <div
-                className="w-full h-full flex items-center justify-center font-mono text-sm text-text-muted"
-                style={{
-                  background:
-                    "radial-gradient(circle at 30% 40%, rgba(200,255,0,0.05) 0%, transparent 60%), #161618",
-                }}
-              >
-                [ your photo here ]
-              </div>
+              {aboutData.profileImage ? (
+                <img
+                  src={aboutData.profileImage}
+                  alt={siteConfig.name}
+                  className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 ease-in-out"
+                />
+              ) : (
+                <div
+                  className="w-full h-full flex items-center justify-center font-mono text-sm text-text-muted"
+                  style={{
+                    background:
+                      "radial-gradient(circle at 30% 40%, rgba(200,255,0,0.05) 0%, transparent 60%), #161618",
+                  }}
+                >
+                  [ your photo here ]
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-br from-accent-dim to-transparent" />
             </div>
           </ScrollReveal>
